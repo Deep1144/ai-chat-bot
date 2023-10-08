@@ -1,3 +1,28 @@
+Frontend: React, tailwind
+<br />
+Backend: Nodejs (Node version: 18.17.1)
+
+Backend url: https://ai-bot-be.onrender.com/
+<br />
+Frontend url: https://effortless-sprinkles-19f01c.netlify.app/
+
+
+## How to run the project
+
+#### Frontend: 
+- Run `yarn` to install dependencies.
+- Run `npm run dev` to start the development server.
+
+
+#### Backend: 
+- Run `yarn` to install dependencies.
+- Rename `.env.sample` to `.env`.
+- Update `OPENAI_API_KEY` to your API key.
+- Run `npm run dev` to start the development server.
+
+## Features
+
+
 ### Chatbot UI
 - Implement the UI for the chatbot in React. ✅
 - Implement functionality to collapse and expand the chatbot modal. ✅
@@ -20,5 +45,6 @@
 - Create multiple test cases to validate the reliability and accuracy of your implemented chatbot feature.
 
 ### Optional
-- Rate limiting for OpenAI API calls.
+- Rate limiting for OpenAI API calls. ✅ (Showing rate limit details on the UI)
 - Add support for multiple languages. ✅
+
