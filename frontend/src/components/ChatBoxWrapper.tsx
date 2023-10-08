@@ -3,6 +3,7 @@ import ChevronDown from "../assets/chevron-down.svg";
 import MessageForm from "./MessageForm";
 import QuickReplies from "./QuickReplies";
 import MessageContent from "./MessageContent";
+import { BACKEND_BASE_URL } from "../core/constants";
 
 export type IChatObject = {
   content: string;
@@ -62,7 +63,7 @@ function ChatBox() {
     setQuickReplies([]);
 
     try {
-      const response = await fetch("http://localhost:8080/api/chat", {
+      const response = await fetch(BACKEND_BASE_URL + "chat", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
