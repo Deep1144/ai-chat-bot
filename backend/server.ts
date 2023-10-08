@@ -6,7 +6,7 @@ new Server(app);
 const PORT: number = process.env.PORT ? parseInt(process.env.PORT, 10) : 8080;
 
 app
-  .listen(PORT, "localhost", function () {
+  .listen(PORT, function () {
     console.log(`Server is running on port ${PORT}.`);
   })
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
