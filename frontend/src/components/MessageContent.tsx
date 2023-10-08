@@ -1,4 +1,3 @@
-import React from "react";
 import { IChatObject } from "./ChatBoxWrapper";
 import RobotIcon from "../assets/robot-icon.svg";
 import PersonIcon from "../assets/person.svg";

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import ChevronDown from "../assets/chevron-down.svg";
 import MessageForm from "./MessageForm";
 import QuickReplies from "./QuickReplies";

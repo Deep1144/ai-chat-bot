@@ -1,5 +1,3 @@
-import React from "react";
-
 type Props = {
   quickReplies: string[];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
