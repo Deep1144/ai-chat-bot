@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import ChevronDown from "../assets/chevron-down.svg";
 import MessageForm from "./MessageForm";
 import QuickReplies from "./QuickReplies";
@@ -15,6 +15,7 @@ function ChatBox() {
   const [message, setMessage] = useState("");
   const [chats, setChats] = useState<IChatObject[]>([]);
   const [isTyping, setIsTyping] = useState(false);
+  const chatContainerRef = useRef<HTMLDivElement>(null);
   const [error, setError] = useState("");
   const [defaultMessage] = useState<IChatObject[]>([
     {
@@ -22,28 +23,15 @@ function ChatBox() {
       Simply give me a word and watch your ideas come to life. Note: I'm in beta so patience is appreciated.`,
       role: "assistant",
     },
-    // {
-    //   content: `Hi, I'm your AI design partner, from crafting layouts from scratch to generating original content, I've got you covered.
-    //   Simply give me a word and watch your ideas come to life. Note: I'm in beta so patience is appreciated.`,
-    //   role: "assistant",
-    // },
-    // {
-    //   content: `Hi, I'm your AI design partner, from crafting layouts from scratch to generating original content, I've got you covered.
-    //   Simply give me a word and watch your ideas come to life. Note: I'm in beta so patience is appreciated.`,
-    //   role: "assistant",
-    // },
-    // {
-    //   content: `Hi, I'm your AI design partner, from crafting layouts from scratch to generating original content, I've got you covered.
-    //   Simply give me a word and watch your ideas come to life. Note: I'm in beta so patience is appreciated.`,
-    //   role: "assistant",
-    // },
   ]);
-  const [quickReplies, setQuickReplies] = useState([
-    // "Hello! How can I assist you today?",
-    // "Hello! How can I assist you today?",
-    // "Hello! How can I assist you today?",
-    // "Hello! How can I assist you today?",
-  ]);
+
+  const [ratelimit, setRateLimit] = useState<{
+    "x-ratelimit-limit-requests": string;
+    "x-ratelimit-limit-tokens": string;
+    "x-ratelimit-remaining-requests": string;
+    "x-ratelimit-remaining-tokens": string;
+  }>();
+  const [quickReplies, setQuickReplies] = useState([]);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const sendMessage = async (e: any, message: string) => {
@@ -51,14 +39,13 @@ function ChatBox() {
 
     if (!message) return;
     setIsTyping(true);
-    scrollTo(0, 1e10);
 
     const msgs = chats;
     msgs.push({
       role: "user",
       content: message,
     });
-    setChats(msgs);
+    setChats([...msgs]);
     setMessage("");
     setQuickReplies([]);
 
@@ -78,16 +65,25 @@ function ChatBox() {
       }
 
       msgs.push(data.output.message);
-      setChats(msgs);
+      setChats([...msgs]);
       setQuickReplies(data.quick_replies);
+      setRateLimit(data.ratelimit);
       setIsTyping(false);
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       setIsTyping(false);
       setError(error.message);
-      scrollTo(0, 1e10);
     }
   };
+
+  useEffect(() => {
+    if (chatContainerRef.current && chats.length) {
+      chatContainerRef.current.scrollTo({
+        top: chatContainerRef.current.scrollHeight + 100,
+        behavior: "smooth",
+      });
+    }
+  }, [chats]);
 
   const toggleChatVisibility = useCallback(
     () => setIsChatVisible(!isChatVisible),
@@ -140,7 +136,10 @@ function ChatBox() {
             </button>
           </div>
         </div>
-        <div className="flex-1 px-4 py-4 overflow-y-auto no-scrollbar">
+        <div
+          className="flex-1 px-4 py-4 overflow-y-auto no-scrollbar"
+          ref={chatContainerRef}
+        >
           {[...defaultMessage, ...chats].map((message, i) => {
             return (
               <MessageContent
@@ -167,6 +166,20 @@ function ChatBox() {
           sendMessage={sendMessage}
           setMessage={setMessage}
         />
+
+        {ratelimit && (
+          <span className="text-gray-500 italic text-xs text-center py-0.5">
+            Rate Limit:{" "}
+            {ratelimit["x-ratelimit-remaining-requests"] +
+              " /" +
+              ratelimit["x-ratelimit-limit-requests"]}
+            , Tokens:{" "}
+            {ratelimit["x-ratelimit-remaining-tokens"] +
+              " /" +
+              ratelimit["x-ratelimit-limit-tokens"]}
+            ,
+          </span>
+        )}
       </div>
       <div className="absolute bottom-10 right-4 md:right-10">
         <button
