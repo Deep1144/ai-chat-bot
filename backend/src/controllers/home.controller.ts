@@ -47,7 +47,7 @@ export async function chatController(req: Request, res: Response) {
         },
         {
           role: "user",
-          content: `What are some quick replies to the last response from assistant, that I can use as quick reply? use lang from last response`,
+          content: `What are some quick replies to the last response from assistant, that I can use as quick reply? use language from this message ${gptResponse.data['choices'][0]['message']['content']}`,
         },
       ],
     });
