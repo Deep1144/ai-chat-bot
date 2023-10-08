@@ -21,6 +21,7 @@ export async function chatController(req: Request, res: Response) {
         },
         ...chats,
       ],
+      // max_tokens:
     }).withResponse();
     console.log('gptResponse', gptResponse.response.headers)
   } catch (error) {

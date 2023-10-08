@@ -49,6 +49,7 @@ function ChatBox() {
     setChats([...msgs]);
     setMessage("");
     setQuickReplies([]);
+    setError('');
 
     try {
       const response = await fetch(BACKEND_BASE_URL + "chat", {
