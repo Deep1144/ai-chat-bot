@@ -1,4 +1,4 @@
-import React from "react";
+import React, { RefObject } from "react";
 import SendIcon from "../assets/send-fill.svg";
 import LoadingAnimation from "./LoadingAnimation";
 
@@ -8,10 +8,11 @@ type Props = {
   isTyping: boolean;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   sendMessage: (_e: any, message: string) => Promise<void>;
+  inputFieldRef: RefObject<HTMLInputElement>
 };
 
 function MessageForm(props: Props) {
-  const { message, setMessage, isTyping, sendMessage } = props;
+  const { message, setMessage, isTyping, sendMessage, inputFieldRef } = props;
 
   return (
     <div className="flex items-center border-t p-2">
@@ -23,6 +24,7 @@ function MessageForm(props: Props) {
             placeholder="Aa"
             autoFocus
             onChange={(e) => setMessage(e.target.value)}
+            ref={inputFieldRef}
             value={message}
           />
         </form>

@@ -16,6 +16,7 @@ function ChatBox() {
   const [chats, setChats] = useState<IChatObject[]>([]);
   const [isTyping, setIsTyping] = useState(false);
   const chatContainerRef = useRef<HTMLDivElement>(null);
+  const inputFieldRef = useRef<HTMLInputElement>(null);
   const [error, setError] = useState("");
   const [defaultMessage] = useState<IChatObject[]>([
     {
@@ -114,6 +115,12 @@ function ChatBox() {
     };
   }, [toggleChatVisibility]);
 
+  useEffect(() => {
+    if (isChatVisible && inputFieldRef.current) {
+      inputFieldRef.current.focus()
+    }
+  }, [isChatVisible]);
+
   return (
     <div className="h-screen ">
       <div
@@ -165,6 +172,7 @@ function ChatBox() {
           message={message}
           sendMessage={sendMessage}
           setMessage={setMessage}
+          inputFieldRef={inputFieldRef}
         />
 
         {ratelimit && (
@@ -177,7 +185,6 @@ function ChatBox() {
             {ratelimit["x-ratelimit-remaining-tokens"] +
               " /" +
               ratelimit["x-ratelimit-limit-tokens"]}
-            ,
           </span>
         )}
       </div>
